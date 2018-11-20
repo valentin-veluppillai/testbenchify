@@ -1,0 +1,5 @@
+#!/bin/sh
+#automatically generate vhdl testbenches form soure vhdl file
+#github.com/valentin-veluppillai/testbenchify
+
+exec python3  /opt/testbenchify/testbenchify.py "$1"
