@@ -7,13 +7,11 @@ def main():
     try:
         wd = os.getcwd()
         os.chdir(wd)
-        print(wd)
         if(len(sys.argv) != 2):
             raise IOError("no file passed")
         vhdl_filename = sys.argv[1]
         project = vhdl_filename.split(".")[0]
         tb_filename = "tb_" + vhdl_filename;
-        tabcount = 0;
 
         vhdl_file = open(vhdl_filename, 'r')
         if (os.path.isfile(tb_filename)):
@@ -48,7 +46,6 @@ def main():
         regex = re.compile(r"\dto\d", re.IGNORECASE)
         for set in port_list:
             set[1] = set[1].replace(";", "", 1)
-            print(set[1][0])
             if set[1][0] == "i":
                 set[1] = set[1].replace("in", "", 1)
                 set.append("in")
@@ -58,11 +55,13 @@ def main():
             set[1] = set[1].replace("downto", " downto ", 1)
             set[1] = re.sub(regex, fixport ,set[1]);
 
+        tabcount = 0 #keeps track of indentation
+
         #header/entitty
         tb_file = open(tb_filename, 'w')
         tb_file.write("library ieee;\n")
-        tb_file.write("\t"* (1) + "use ieee.std_logic_1164.all;\n")
-        tb_file.write("\t"* (1) + "use ieee.numeric_std.all;\n\nentity tb_" + project + " is\n")
+        tb_file.write("\t" + "use ieee.std_logic_1164.all;\n")
+        tb_file.write("\t" + "use ieee.numeric_std.all;\n\nentity tb_" + project + " is\n")
         tb_file.write("end tb_" + project + ";\n\n")
 
         #architecture
@@ -131,27 +130,31 @@ def main():
             tb_file.write("\t" * tabcount + ");\n\n")
 
         #power on
+        tabcount = tabcount -1
         tb_file.write("\t" * tabcount + "p_geninputs: process\n")
         tb_file.write("\t" * tabcount + "begin\n")
+        tabcount += 1
         tb_file.write("\t" * tabcount + "if (done = '0') then\n")
         tabcount += 1
         tb_file.write("\t" * tabcount + "done <= '1';\n")
         tb_file.write("\t" * tabcount + "s_reset_n <= '0';\n")
-        tb_file.write("\t" * tabcount + "s_clock <= '1';\n")
-        tb_file.write("\t" * tabcount + "wait for 10 ns;\n")
-        tb_file.write("\t" * tabcount + "s_clock <= '0';\n")
-        tb_file.write("\t" * tabcount + "wait for 10 ns;\n")
+        tb_file.write("\t" * tabcount + "wait for 20 ns;\n")
         tb_file.write("\t" * tabcount + "s_reset_n <= '1';\n")
         tabcount -= 1
-        tb_file.write("\t" * tabcount + " end if;\n\n\n\n")
+        tb_file.write("\t" * tabcount + " end if;\n")
+        tabcount -= 1
+        tb_file.write("\t" * tabcount + "end process;\n\n")
 
         #clock generator -- assumes a port signal called "clock"
+        tb_file.write("\t" * tabcount + "p_genclock: process\n")
+        tb_file.write("\t" * tabcount + "begin\n")
+        tabcount += 1
         tb_file.write("\t" * tabcount + "s_clock <= '1';\n")
         tb_file.write("\t" * tabcount + "wait for 10 ns;\n")
         tb_file.write("\t" * tabcount + "s_clock <= '0';\n")
         tb_file.write("\t" * tabcount + "wait for 10 ns;\n")
         tabcount -= 1
-        tb_file.write("\t" * tabcount + "end process;\n")
+        tb_file.write("\t" * tabcount + "end process;\n\n\n\n")
         tabcount -= 1
         tb_file.write("\t" * tabcount + "end arch;\n")
     except IOError:
