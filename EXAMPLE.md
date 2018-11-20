@@ -1,4 +1,6 @@
-# input file - "example.vhd"
+# Example
+The comments in both files were added after using testbenchify - it does not deal with comments all to well right now...
+## input file - "example.vhd"
 ```vhdl
 library ieee;
   use ieee.std_logic_1164.all;
@@ -34,7 +36,7 @@ begin
   end process p_process2;
 end architecture;
 ```
-# generated output file - "tb_example.vhd"
+## generated output file - "tb_example.vhd"
 ```vhdl
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -44,6 +46,7 @@ entity tb_example is
 end tb_example;
 
 architecture arch of tb_example is
+
 	component example is
 		generic (
 			n	:	natural
@@ -65,9 +68,10 @@ architecture arch of tb_example is
 	signal done : std_logic := '0';
 
 begin
+  
 	i_example : example
 		generic map(
-			n	=>		--generics cannot be generated
+			n	=>       --generics cannot be generated
 		)
 		port map (
 			clock	=>	s_clock,
@@ -94,8 +98,6 @@ begin
 		s_clock <= '0';
 		wait for 10 ns;
 	end process;
-
-
 
 end arch;
 
