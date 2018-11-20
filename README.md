@@ -10,8 +10,8 @@ This tool requires [Python 3](https://www.python.org/) to work.
 ```sh
 sudo apt install python3 -y
 git clone https://github.com/valentin-veluppillai/testbenchify
-cd testbenchify
-sudo scripts/install.sh
+cd testbenchify/scripts
+sudo ./install.sh
 ```
 ## Uninstallation
 ```sh
