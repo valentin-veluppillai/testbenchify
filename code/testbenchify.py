@@ -141,7 +141,7 @@ def main():
         tb_file.write("\t" * tabcount + "wait for 20 ns;\n")
         tb_file.write("\t" * tabcount + "s_reset_n <= '1';\n")
         tabcount -= 1
-        tb_file.write("\t" * tabcount + " end if;\n")
+        tb_file.write("\t" * tabcount + "end if;\n")
         tabcount -= 1
         tb_file.write("\t" * tabcount + "end process;\n\n")
 
